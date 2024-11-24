@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         GetMouseInfo();
+        // Switch projectiles
         if (Input.GetMouseButtonDown(1))
         { // switch projectile
             slingManager.SwitchProjectile();
@@ -45,12 +46,12 @@ public class PlayerController : MonoBehaviour
             // slingManager.SimulateShot(); //FixedUpdate
         }
 
-        if (Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Cancel") && _isDragging)
         {
             _isDragging = false;
             Cursor.visible = true;
-            slingManager.ResetProjectile();
             slingManager.OnProjectileUnloaded();
+            slingManager.ResetProjectile();
         }
         
         if (Input.GetMouseButtonUp(0) && _isDragging) // Shoot
@@ -58,16 +59,6 @@ public class PlayerController : MonoBehaviour
             slingManager.Shoot();
             Cursor.visible = true;
             _isDragging = false;
-            
-            
-            // Rigidbody projectileRb = testProjectile.GetComponent<Rigidbody>();
-            // projectileRb.isKinematic = false;
-            // Vector3 shotDirection = _slingSourcePosition - testProjectile.position;
-            // // Debug.Log(shotDirection);
-            // projectileRb.AddForce(shotDirection * shotMultiplier, ForceMode.Impulse);
-            
-            //Reset
-
         }
     }
     
