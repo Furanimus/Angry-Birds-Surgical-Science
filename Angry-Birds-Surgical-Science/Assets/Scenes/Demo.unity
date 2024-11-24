@@ -305,11 +305,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 389104123}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &526293974 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7003308156715632832, guid: 7658fbbfbb7ae4f8d97c4993c24e1d86, type: 3}
+--- !u!1 &526293969 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7003308156715632839, guid: 7658fbbfbb7ae4f8d97c4993c24e1d86, type: 3}
   m_PrefabInstance: {fileID: 7003308156537213718}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &526293976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526293969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656361d18d9784eadadffe9274d5f201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: 20
 --- !u!1 &601189031
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,6 +679,7 @@ GameObject:
   - component: {fileID: 1270802520}
   - component: {fileID: 1270802522}
   - component: {fileID: 1270802523}
+  - component: {fileID: 1270802524}
   m_Layer: 0
   m_Name: Sling
   m_TagString: Untagged
@@ -805,6 +819,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rightAnchor: {fileID: 1576418467}
   leftAnchor: {fileID: 2022604593}
+--- !u!114 &1270802524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270802516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67ae2123ee7ce423699e8424b4ef333f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadedProjectile: {fileID: 526293976}
+  slingProjectileSource: {fileID: 1657028426}
+  maxDragDistance: 4
+  zOffset: 1
+  shotMultiplier: 5
 --- !u!1 &1412095142
 GameObject:
   m_ObjectHideFlags: 0
@@ -836,10 +867,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slingProjectileSource: {fileID: 1657028426}
   mainCamera: {fileID: 963194227}
-  maxDragDistance: 4
-  yOffset: 4
-  zOffset: 0.5
-  testProjectile: {fileID: 526293974}
+  slingManager: {fileID: 1270802524}
 --- !u!4 &1412095144
 Transform:
   m_ObjectHideFlags: 0
@@ -898,8 +926,7 @@ GameObject:
   - component: {fileID: 1657028428}
   - component: {fileID: 1657028427}
   - component: {fileID: 1657028429}
-  - component: {fileID: 1657028430}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ProjectileSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -984,18 +1011,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10.743143, y: 4.350279, z: 1}
   m_Center: {x: 0.1201849, y: -0.7557974, z: 0}
---- !u!114 &1657028430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1657028425}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8ba7146225f746d494b0eeace80a106, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2022604592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1091,6 +1106,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 272603409450327911, guid: 7658fbbfbb7ae4f8d97c4993c24e1d86, type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7003308156715632832, guid: 7658fbbfbb7ae4f8d97c4993c24e1d86, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -1150,6 +1169,10 @@ PrefabInstance:
     - target: {fileID: 7003308156715632839, guid: 7658fbbfbb7ae4f8d97c4993c24e1d86, type: 3}
       propertyPath: m_Name
       value: Test Projectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 7003308156715632839, guid: 7658fbbfbb7ae4f8d97c4993c24e1d86, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7658fbbfbb7ae4f8d97c4993c24e1d86, type: 3}

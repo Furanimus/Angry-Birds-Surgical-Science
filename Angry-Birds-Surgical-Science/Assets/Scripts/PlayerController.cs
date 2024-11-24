@@ -1,26 +1,21 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
     public Transform slingProjectileSource;
     private Vector3 _slingSourcePosition;
-    private BoxCollider _slingProjectileSourceCollider;
     public Camera mainCamera;
     private Vector3 _mouseScreenPosition;
-    [SerializeField] private float maxDragDistance = 4f;
-    [SerializeField] private float yOffset = 4f;
     private bool _isDragging;
-    [SerializeField] private float zOffset = 1f; 
-    public Transform testProjectile;
-    
     private Vector3 _mouseWorldPosition;
-    private float _mouseX;
-    private float _mouseY;
+    
+    //Sling Manager
+    public SlingManager slingManager;
 
     private void Start()
     {
         mainCamera = Camera.main;
-        _slingProjectileSourceCollider = slingProjectileSource.GetComponent<BoxCollider>();
         _slingSourcePosition = slingProjectileSource.position;
     }
 
@@ -29,6 +24,7 @@ public class PlayerController : MonoBehaviour
         GetMouseInfo();
         if (Input.GetMouseButtonDown(1))
         { // switch projectile
+            slingManager.SwitchProjectile();
             Debug.Log("Right Click");
         }
         
@@ -38,44 +34,43 @@ public class PlayerController : MonoBehaviour
             if (_isDragging)
             {
                 Cursor.visible = false;
+                slingManager.OnProjectileLoaded();
             }
         }
         if (Input.GetMouseButton(0) && _isDragging) // Windup + simulate
         {
-            _mouseScreenPosition.z = _slingSourcePosition.z - mainCamera.transform.position.z - zOffset;
+            _mouseScreenPosition.z = slingManager.SlingSourcePosition.z - mainCamera.transform.position.z - slingManager.ZOffset;
             _mouseWorldPosition = mainCamera.ScreenToWorldPoint(_mouseScreenPosition);
-            Vector3 slingOffset = _mouseWorldPosition - _slingSourcePosition;
-
-            if (slingOffset.magnitude > maxDragDistance)
-            {
-                _mouseWorldPosition = _slingSourcePosition + slingOffset.normalized * maxDragDistance;
-            }
-            
-            if (_mouseWorldPosition.y > _slingSourcePosition.y)
-            {
-                _mouseWorldPosition.y = _slingSourcePosition.y;
-                _mouseWorldPosition.z = _slingSourcePosition.z - zOffset;
-            }
-            
-            testProjectile.position = _mouseWorldPosition;
-            
-            Debug.Log(slingOffset.magnitude);   
-            // SimulateShot(); //FixedUpdate
+            slingManager.EnforceSlingConstraints(_mouseWorldPosition); 
+            // slingManager.SimulateShot(); //FixedUpdate
         }
 
-        if (Input.GetMouseButtonUp(0)) // Shoot
+        if (Input.GetButtonDown("Cancel"))
         {
+            _isDragging = false;
+            Cursor.visible = true;
+            slingManager.ResetProjectile();
+            slingManager.OnProjectileUnloaded();
+        }
+        
+        if (Input.GetMouseButtonUp(0) && _isDragging) // Shoot
+        {
+            slingManager.Shoot();
             Cursor.visible = true;
             _isDragging = false;
-            _slingProjectileSourceCollider.enabled = true;
+            
+            
+            // Rigidbody projectileRb = testProjectile.GetComponent<Rigidbody>();
+            // projectileRb.isKinematic = false;
+            // Vector3 shotDirection = _slingSourcePosition - testProjectile.position;
+            // // Debug.Log(shotDirection);
+            // projectileRb.AddForce(shotDirection * shotMultiplier, ForceMode.Impulse);
+            
+            //Reset
+
         }
     }
-
-    private void SimulateShot()
-    {
-        Debug.Log("Simulating");
-    }
-
+    
     private void CheckSlingDragging()
     {
         Ray ray = mainCamera.ScreenPointToRay(_mouseScreenPosition);
@@ -84,7 +79,6 @@ public class PlayerController : MonoBehaviour
             if (hit.transform == slingProjectileSource)
             {
                 _isDragging = true;
-                _slingProjectileSourceCollider.enabled = false;
             }
         }
     }
