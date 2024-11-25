@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class SlingManager : MonoBehaviour
 {
     [SerializeField] private Projectile loadedProjectile;
-    private Dictionary<Projectile, int> _ammo;
+    private List<Projectile> _projectilePool;
     public Transform slingProjectileSource;
     private Vector3 _slingSourcePosition;
     private bool _shouldShoot;
@@ -16,11 +17,39 @@ public class SlingManager : MonoBehaviour
     public event Action<Vector3> ProjectileLoaded; 
     public event Action ProjectileUnloaded;
 
+    // private const string _projectilesFolderPath = "Assets/Scripts/Projectiles";
+    
     void Start()
     {
+        _projectilePool = new List<Projectile>();
         _slingSourcePosition = slingProjectileSource.position;
-        _ammo = new Dictionary<Projectile, int>();
     }
+
+    // private void Awake()
+    // {
+    //     string[] scriptGUIDs = AssetDatabase.FindAssets("t:Script", new[] { _projectilesFolderPath });
+    //
+    //     foreach (string guid in scriptGUIDs)
+    //     {
+    //         string scriptPath = AssetDatabase.GUIDToAssetPath(guid);
+    //         MonoScript monoScript = AssetDatabase.LoadAssetAtPath<MonoScript>(scriptPath);
+    //
+    //         if (monoScript != null)
+    //         {
+    //             // Get the class type of the script
+    //             Type scriptType = monoScript.GetClass();
+    //
+    //             if (scriptType != null && scriptType.IsSubclassOf(typeof(Projectile)))
+    //             {
+    //                 // Create a new GameObject and attach the script
+    //                 GameObject projectileObject = new GameObject(scriptType.Name);
+    //                 Projectile projectile = (Projectile)projectileObject.AddComponent(scriptType);
+    //                 Debug.Log($"Created GameObject with script: {scriptType.Name}");
+    //                 // _projectilePool.Add(projectile);
+    //             }
+    //         }
+    //     }
+    // }
 
     public Vector3 SlingSourcePosition => _slingSourcePosition;
 
@@ -71,7 +100,7 @@ public class SlingManager : MonoBehaviour
         throw new System.NotImplementedException();
     }
 
-    public void ResetProjectile()
+    public void ResetProjectile() // TEMP
     {
         loadedProjectile.transform.position = SlingSourcePosition;
         loadedProjectile.GetComponent<Rigidbody>().velocity = Vector3.zero;
