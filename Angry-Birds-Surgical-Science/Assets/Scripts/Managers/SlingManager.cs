@@ -118,8 +118,11 @@ public class SlingManager : MonoBehaviour
     public void ResetProjectile() // TEMP
     {
         loadedProjectile.transform.position = SlingSourcePosition;
+        
+        // Inefficient, this was for testing purposes
         loadedProjectile.GetComponent<Rigidbody>().velocity = Vector3.zero;
         loadedProjectile.GetComponent<Rigidbody>().isKinematic = true;
+        loadedProjectile.ResetProperties();
     }
 
     public void OnProjectileLoaded()
