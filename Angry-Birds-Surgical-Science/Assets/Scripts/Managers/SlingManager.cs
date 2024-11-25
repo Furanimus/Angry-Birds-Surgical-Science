@@ -11,6 +11,7 @@ public class SlingManager : MonoBehaviour
     public Transform slingProjectileSource;
     private Vector3 _slingSourcePosition;
     private bool _shouldShoot;
+    private ProjectileSimulator _simulator;
     [SerializeField] private float maxDragDistance = 4f;
     [SerializeField] private float zOffset = 1f;
     [SerializeField] private float shotMultiplier = 5f;
@@ -22,6 +23,7 @@ public class SlingManager : MonoBehaviour
     void Start()
     {
         _projectilePool = new List<Projectile>();
+        _simulator = GetComponent<ProjectileSimulator>();
         _slingSourcePosition = slingProjectileSource.position;
     }
 
@@ -63,6 +65,7 @@ public class SlingManager : MonoBehaviour
         {
             _shouldShoot = false;
             loadedProjectile.Rigidbody.isKinematic = false;
+            loadedProjectile.IsFlying = true;
             Vector3 shotDirection = _slingSourcePosition - loadedProjectile.transform.position;
             loadedProjectile.Rigidbody.AddForce(shotDirection * shotMultiplier, ForceMode.Impulse); //TODO: Add projectile multipliers
             OnProjectileUnloaded();
