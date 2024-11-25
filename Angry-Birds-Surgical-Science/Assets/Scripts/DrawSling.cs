@@ -44,9 +44,9 @@ public class DrawSling : MonoBehaviour
         }
     }
 
-    private void ProjectileLoaded(Vector3 position)
+    private void ProjectileLoaded(Projectile projectile)
     {
-        _projectilePosition = position;
+        _projectilePosition = projectile.transform.position;
         if (_lineRenderer.positionCount < 3)
         {
             _lineRenderer.positionCount = 3;

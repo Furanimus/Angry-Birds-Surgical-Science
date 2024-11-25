@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SlingManager : MonoBehaviour
 {
@@ -14,8 +15,10 @@ public class SlingManager : MonoBehaviour
     private ProjectileSimulator _simulator;
     [SerializeField] private float maxDragDistance = 4f;
     [SerializeField] private float zOffset = 1f;
-    [SerializeField] private float shotMultiplier = 5f;
-    public event Action<Vector3> ProjectileLoaded; 
+    [SerializeField] private float forceMultiplier = 5f;
+
+    public float ForceMultiplier => forceMultiplier;
+    public event Action<Projectile> ProjectileLoaded; 
     public event Action ProjectileUnloaded;
 
     // private const string _projectilesFolderPath = "Assets/Scripts/Projectiles";
@@ -27,6 +30,15 @@ public class SlingManager : MonoBehaviour
         _slingSourcePosition = slingProjectileSource.position;
     }
 
+    /*
+     * After some thought I wanted to load all the prefabs into the sling manager into a list,
+     * and iterating to the next projectile when the user right clicks.
+     * didn't have the time.
+     * I understood that The solution I wanted to implement using iteration
+     * over scripts wouldn't work because there will not be a gameObject
+     */
+    
+    
     // private void Awake()
     // {
     //     string[] scriptGUIDs = AssetDatabase.FindAssets("t:Script", new[] { _projectilesFolderPath });
@@ -67,7 +79,7 @@ public class SlingManager : MonoBehaviour
             loadedProjectile.Rigidbody.isKinematic = false;
             loadedProjectile.IsFlying = true;
             Vector3 shotDirection = _slingSourcePosition - loadedProjectile.transform.position;
-            loadedProjectile.Rigidbody.AddForce(shotDirection * shotMultiplier, ForceMode.Impulse); //TODO: Add projectile multipliers
+            loadedProjectile.Rigidbody.AddForce(shotDirection * forceMultiplier, ForceMode.Impulse);
             OnProjectileUnloaded();
         }
     }
@@ -112,7 +124,7 @@ public class SlingManager : MonoBehaviour
 
     public void OnProjectileLoaded()
     {
-        ProjectileLoaded?.Invoke(loadedProjectile.transform.position);
+        ProjectileLoaded?.Invoke(loadedProjectile);
     }
     
     public void OnProjectileUnloaded()

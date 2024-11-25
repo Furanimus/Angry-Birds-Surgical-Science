@@ -21,7 +21,7 @@ public class Target : MonoBehaviour
         {
             _scoreManager.AddScore(score);
             Destroy(gameObject);
-            Destroy(other.gameObject);
+            // Destroy(other.gameObject);
         }    
     }
 }
