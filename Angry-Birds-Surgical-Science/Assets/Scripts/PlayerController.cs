@@ -4,7 +4,6 @@ using UnityEngine.Serialization;
 public class PlayerController : MonoBehaviour
 {
     public Transform slingProjectileSource;
-    private Vector3 _slingSourcePosition;
     public Camera mainCamera;
     private Vector3 _mouseScreenPosition;
     private bool _isDragging;
@@ -16,7 +15,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         mainCamera = Camera.main;
-        _slingSourcePosition = slingProjectileSource.position;
     }
 
     void Update()
@@ -36,6 +34,7 @@ public class PlayerController : MonoBehaviour
             {
                 Cursor.visible = false;
                 slingManager.OnProjectileLoaded();
+                slingManager.ResetProjectile();
             }
         }
         if (Input.GetMouseButton(0) && _isDragging) // Windup + simulate
